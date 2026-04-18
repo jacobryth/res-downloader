@@ -67,10 +67,4 @@ Clean UI, easy to use, and supports a wide range of resource sniffing and downlo
 
 ### 📡 Live Stream Resources
 
-- We recommend [OBS](https://obsproject.com/) for recording (search for setup tutorials)
-
-### 🔒 Certificate Issues (macOS)
-
-- If HTTPS resources are not captured, open **Keychain Access** and make sure the installed certificate is set to **"Always Trust"**
-
-##
+- Copy the live stream URL from the captured list and paste it into a player such as [VLC](https://www.videolan.org/vlc/) or [PotPlayer](https://potplayer.daum.net/) to watch or record.
