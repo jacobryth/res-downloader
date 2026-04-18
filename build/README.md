@@ -46,6 +46,7 @@ done
 popd
 
 # 下载appimagetool
+# Note: if the GitHub download is slow, you can use a mirror or pre-download the tool manually
 wget -O ./build/bin/appimagetool-x86_64.AppImage https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage 
 chmod +x ./build/bin/appimagetool-x86_64.AppImage
 ./build/bin/appimagetool-x86_64.AppImage build/linux/AppImage build/bin/res-downloader_$(jq -r '.info.productVersion' wails.json)_linux_amd64.AppImage
@@ -64,32 +65,5 @@ wails build -platform "linux/arm64" -s -skipbindings
 
 # 打包debian
 cp build/bin/res-downloader build/linux/Debian/usr/local/bin/
-echo "$(cat build/linux/Debian/DEBIAN/.control | sed -e "s/{{Version}}/$(jq -r '.info.productVersion' wails.json)/g" -e "s/{{Architecture}}/arm64/g")" > build/linux/Debian/DEBIAN/control
-dpkg-deb --build ./build/linux/Debian build/bin/res-downloader_$(jq -r '.info.productVersion' wails.json)_linux_arm64.deb
-
-mv -f build/bin/res-downloader build/bin/res-downloader_$(jq -r '.info.productVersion' wails.json)_linux_arm64
-```
-
-### Arch Linux 
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/res-downloader.svg)](https://repology.org/project/res-downloader/versions)
-
-```bash
-yay -Syu res-downloader 
-```
-### Linux 本地编译
-
-```bash
-git clone https://github.com/putyy/res-downloader.git
-cd res-downloader
-# -- GO Proxy --
-# 如果国内编译时 go 下载慢或报错，可以设置 go 国内代理加速，否则不用设置
-export GO111MODULE=on
-export GOPROXY=https://goproxy.cn,direct
-# -- Go Proxy --
-wails build
-cd build
-sudo install -Dvm755 bin/res-downloader -t /usr/bin
-sudo install -Dvm644 appicon.png /usr/share/icons/hicolor/512x512/apps/res-downloader.png
-sudo install -Dvm644 build/linux/Arch/res-downloader.desktop /usr/share/applications/res-downloader.desktop 
+echo "$(cat build/linux/Debian/DEBIAN/.control | sed -e "s/{{Version}}/$(jq -r '.info.productVersion' wails.json)/g" -e "s/{{Architecture}}/arm64/g")" > buil
 ```
