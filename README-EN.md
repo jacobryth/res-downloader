@@ -67,4 +67,4 @@ Clean UI, easy to use, and supports a wide range of resource sniffing and downlo
 
 ### 📡 Live Stream Resources
 
-- Copy the live stream URL from the resource list and paste it into a player such as [VLC](https://www.videolan.org/vlc/) or [PotPlayer](https://potplayer.daum.net/) to watch or record.
+- Copy the live stream URL from the captured resource list and paste it into a player such as [VLC](https://www.videolan.org/vlc/) or [PotPlayer](https://potplayer.daum.net/) to watch or record the stream.
