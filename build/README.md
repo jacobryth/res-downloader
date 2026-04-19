@@ -63,5 +63,6 @@ docker run --platform linux/arm64 -it --name res-downloader-arm-build --network 
 # 容器内
 cd /www/res-downloader
 wails build -platform "linux/arm64" -s -skipbindings
-# Note: the arm64 build command above appears to be truncated (-skipbindin should be -skipbindings)
+# Note: the arm64 section above appears to be incomplete (missing packaging steps).
+# TODO: add debian and AppImage packaging steps for arm64, mirroring the amd64 steps above.
 ```
