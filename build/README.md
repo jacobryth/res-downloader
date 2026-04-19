@@ -63,8 +63,6 @@ docker run --platform linux/arm64 -it --name res-downloader-arm-build --network 
 # 容器内
 cd /www/res-downloader
 wails build -platform "linux/arm64" -s -skipbindings
-
-# 打包debian
-cp build/bin/res-downloader build/linux/Debian/usr/local/bin/
-echo "$(cat build/linux/Debian/DEBIAN/.control | sed -e "s/{{V
+# Note: the arm64 section above appears to be truncated; the debian/AppImage packaging
+# steps should mirror the amd64 section but with arm64 substituted where appropriate.
 ```
