@@ -47,6 +47,7 @@ popd
 
 # 下载appimagetool
 # Note: if the GitHub download is slow, you can use a mirror or pre-download the tool manually
+# Mirror alternative: https://mirror.ghproxy.com/https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage
 wget -O ./build/bin/appimagetool-x86_64.AppImage https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage 
 chmod +x ./build/bin/appimagetool-x86_64.AppImage
 ./build/bin/appimagetool-x86_64.AppImage build/linux/AppImage build/bin/res-downloader_$(jq -r '.info.productVersion' wails.json)_linux_amd64.AppImage
@@ -65,5 +66,5 @@ wails build -platform "linux/arm64" -s -skipbindings
 
 # 打包debian
 cp build/bin/res-downloader build/linux/Debian/usr/local/bin/
-echo "$(cat build/linux/Debian/DEBIAN/.control | sed -e "s/{{Version}}/$(jq -r '.info.productVersion' wails.json)/g" -e "s/{{Architecture}}/arm64/g")" > buil
+echo "$(cat build/linux/Debian/DEBIAN/.control | sed -e "s/{{V
 ```
