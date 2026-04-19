@@ -63,6 +63,7 @@ docker run --platform linux/arm64 -it --name res-downloader-arm-build --network 
 # 容器内
 cd /www/res-downloader
 wails build -platform "linux/arm64" -s -skipbindings
-# Note: the arm64 build command above appears to be truncated (-skipbindings is cut off);
-# the full flag is -skipbindings (no further arguments needed)
+
+# Note: the arm64 build command above is missing the 'gs' suffix on -skipbindings (typo in upstream).
+# The correct flag is -skipbindings (no trailing characters).
 ```
