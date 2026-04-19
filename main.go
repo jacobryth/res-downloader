@@ -1,20 +1,15 @@
 package main
 
 import (
-	"context"
 	"embed"
-	"fmt"
-	"github.com/wailsapp/wails/v2/pkg/menu"
-	"github.com/wailsapp/wails/v2/pkg/options/linux"
-	"github.com/wailsapp/wails/v2/pkg/options/mac"
-	"github.com/wailsapp/wails/v2/pkg/options/windows"
 	"log"
-	"res-downloader/core"
-	"runtime"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/linux"
+	"github.com/wailsapp/wails/v2/pkg/options/mac"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
 //go:embed all:frontend/dist
@@ -23,79 +18,48 @@ var assets embed.FS
 //go:embed build/appicon.png
 var icon []byte
 
-//go:embed wails.json
-var wailsJson string
-
 func main() {
 	// Create an instance of the app structure
-	app := core.GetApp(assets, wailsJson)
-	bind := core.NewBind()
-	isMac := runtime.GOOS == "darwin"
-	// menu
-	appMenu := menu.NewMenu()
-	if isMac {
-		appMenu.Append(menu.AppMenu())
-		appMenu.Append(menu.EditMenu())
-		appMenu.Append(menu.WindowMenu())
-	}
+	app := NewApp()
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:                    app.AppName,
-		Width:                    1280,
-		MinWidth:                 960,
-		Height:                   800,
-		MinHeight:                600,
-		Frameless:                !isMac,
-		Menu:                     appMenu,
-		EnableDefaultContextMenu: true,
+		Title:     "Res Downloader",
+		Width:     1024,
+		Height:    768,
+		MinWidth:  800,
+		MinHeight: 600,
 		AssetServer: &assetserver.Options{
-			Assets:     assets,
-			Middleware: core.Middleware,
+			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup: func(ctx context.Context) {
-			logo := `
-	 _ __    ___   ___            __| |   ___   __      __  _ __   | |   ___     __ _     __| |   ___   _ __
-	| '__|  / _ \ / __|  _____   / _· |  / _ \  \ \ /\ / / | '_ \  | |  / _ \   / _· |   / _· |  / _ \ | ·__|
-	| |    |  __/ \__ \ |_____| | (_| | | (_) |  \ V  V /  | | | | | | | (_) | | (_| |  | (_| | |  __/ | |
-	|_|     \___| |___/          \__,_|  \___/    \_/\_/   |_| |_| |_|  \___/   \__ ,_|  \__,_|  \___| |_|`
-
-			log.Println(logo)
-			fmt.Println("version:", app.Version)
-			fmt.Println("lockfile:", app.LockFile)
-			app.Startup(ctx)
-		},
-		OnShutdown: func(ctx context.Context) {
-			app.OnExit()
-		},
+		OnStartup:        app.startup,
+		OnShutdown:       app.shutdown,
 		Bind: []interface{}{
-			bind,
-		},
-		Mac: &mac.Options{
-			TitleBar: mac.TitleBarHiddenInset(),
-			About: &mac.AboutInfo{
-				Title:   fmt.Sprintf("%s %s", app.AppName, app.Version),
-				Message: app.Description + app.Copyright,
-				Icon:    icon,
-			},
-			WebviewIsTransparent: false,
-			WindowIsTranslucent:  false,
+			app,
 		},
 		Windows: &windows.Options{
-			WebviewIsTransparent:              false,
-			WindowIsTranslucent:               false,
-			DisableFramelessWindowDecorations: false,
+			WebviewIsTransparent: false,
+			WindowIsTranslucent:  false,
+			DisableWindowIcon:    false,
+		},
+		Mac: &mac.Options{
+			TitleBar:             mac.TitleBarHiddenInset(),
+			WebviewIsTransparent: true,
+			WindowIsTranslucent:  true,
+			About: &mac.AboutInfo{
+				Title:   "Res Downloader",
+				Message: "A resource downloader for various media platforms.",
+				Icon:    icon,
+			},
 		},
 		Linux: &linux.Options{
-			ProgramName:         app.AppName,
 			Icon:                icon,
-			WebviewGpuPolicy:    linux.WebviewGpuPolicyOnDemand,
-			WindowIsTranslucent: true,
+			WindowIsTranslucent: false,
 		},
 	})
 
 	if err != nil {
-		println("Error:", err.Error())
+		log.Fatal(err)
 	}
 }
